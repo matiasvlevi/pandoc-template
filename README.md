@@ -1,13 +1,16 @@
-# Arduino Workshops
+# Pandoc Template
 
-The documents are made with pandoc, built documents are available in `./docs`
+### Features
 
-### Build documents
+* Filter for using meta props as macros with `{{propname}}`
+* `./src/*.md` --> `./docs/*.pdf`
 
-#### Requirements for build
+
+### Build 
 
 * pandoc
 * texlive
+* xelatex
 
 ```
 make
