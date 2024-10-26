@@ -1,22 +1,42 @@
-local base = ''
-function Meta(meta) base = meta.root end
+local base = '';
+local pwd  = '';
+
+function Meta (meta) 
+    -- Store root property globally
+    base = meta.root;
+
+    -- Get pwd and store globally and in meta
+    pwd = os.getenv('PWD')
+    meta.pwd = pwd;
+
+    return meta;
+end
 
 function join(a, b)
-    if b:sub(1, 1) == '.' then b = b:sub(2, #b); end
+    if (a == os.getenv('PWD')) then
+        b = b:gsub("%.%./", "");
+    end
+
+    if b:sub(1, 1) == '.' then 
+        b = b:sub(2, #b); 
+    end
+
     if a:sub(-1) == '/' and b:sub(1, 1) ~= '/' or
        a:sub(-1) ~= '/' and b:sub(1, 1) == '/' then
         return a .. b;
     end
+
     if a:sub(-1) ~= '/' and b:sub(1, 1) ~= '/' then
         return a ..'/'.. b;
     end
+
     if a:sub(-1) == '/' and b:sub(1, 1) == '/' then
         return a:sub(1, #a - 1) .. b;
     end
 end
 
 function fix_link (url)
-    return url:sub(1,2) == './' and join(pandoc.utils.stringify(base), url) or url 
+    return join(pandoc.utils.stringify(pwd), url) 
 end
 
 function Link (link) 
@@ -24,7 +44,7 @@ function Link (link)
     return link 
 end
 
-function Image (img) 
+function Image (img)
     img.src = fix_link(img.src);
     return img 
 end

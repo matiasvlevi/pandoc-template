@@ -58,13 +58,13 @@ Define the document's root directory for assets. This allows your local environe
 ```mdx
 ---
 title: My Document
-root: ./src/
+root: ./assets/
 ---
 
-![Sample Caption](./assets/frog.png)
+![Sample Caption](../assets/frog.png)
 ```
 
-This will resolve as `./src/assets/frog.png`.
+This will resolve as `./assets/frog.png`.
 
 <br/>
 
