@@ -1,13 +1,20 @@
-# Define variables
-
 CSS = pandoc.css
-TEMPLATE = eisvogel
+TEMPLATE = eisvogel.tex
 SOURCE_DIR = ./src
 OUTPUT_DIR = ./docs
 PDF_ENGINE = xelatex
-LUA_FILTER = filters/metamacros.lua
+FILTERS = filters
 
-OPTIONS= "fontsize=12pt"
+OPTIONS=fontsize=12pt
+
+PFLAGS=--to=pdf\
+	  --pdf-engine=$(PDF_ENGINE)\
+	  --css $(CSS)\
+	  --wrap=preserve\
+	  --template $(TEMPLATE)\
+	  --listings -V $(OPTIONS)\
+	  --lua-filter=$(FILTERS)/metamacros.lua\
+	  --lua-filter=$(FILTERS)/baseroot.lua
 
 # List of source md files
 SOURCES = $(wildcard $(SOURCE_DIR)/*.md)
@@ -19,9 +26,9 @@ TARGETS = $(patsubst $(SOURCE_DIR)/%.md,$(OUTPUT_DIR)/%.pdf,$(SOURCES))
 all: $(TARGETS)
 
 # Rule for building PDFs
-$(OUTPUT_DIR)/%.pdf: $(SOURCE_DIR)/%.md $(CSS) $(LUA_FILTER)
+$(OUTPUT_DIR)/%.pdf: $(SOURCE_DIR)/%.md $(CSS) Makefile
 	@mkdir -p $(OUTPUT_DIR)
-	pandoc --to=pdf --pdf-engine=$(PDF_ENGINE) --css $(CSS) $< -o $@ --template $(TEMPLATE) --listings -V $(OPTIONS) --lua-filter=$(LUA_FILTER) 
+	pandoc $(PFLAGS) $< -o $@
 
 # Clean rule
 clean:
