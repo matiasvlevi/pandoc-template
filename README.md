@@ -2,10 +2,9 @@
 
 ### Features
 
-* Multipage documents
 * Meta-macros
-* Asset root
-* `./src/*.md` --> `./docs/*.pdf`
+* Asset webroot
+* Multiple documents (`./src/**/*.md` --> `./docs/**/*.pdf`)
 
 
 ### Build 
@@ -61,7 +60,10 @@ title: My Document
 root: ./assets/
 ---
 
-![Sample Caption](../assets/frog.png)
+<!-- use the relative path for assets -->
+
+![Sample Caption](../assets/frog.png) 
+
 ```
 
 This will resolve as `./assets/frog.png`.

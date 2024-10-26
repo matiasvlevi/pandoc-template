@@ -16,10 +16,10 @@ PFLAGS=--to=pdf\
 	  --lua-filter=$(FILTERS)/metamacros.lua\
 	  --lua-filter=$(FILTERS)/baseroot.lua
 
-# List of source md files
-SOURCES = $(wildcard $(SOURCE_DIR)/*.md)
+# List of all source md files, including subdirectories
+SOURCES = $(shell find $(SOURCE_DIR) -name '*.md')
 
-# Target PDF files
+# Target PDF files maintaining directory structure
 TARGETS = $(patsubst $(SOURCE_DIR)/%.md,$(OUTPUT_DIR)/%.pdf,$(SOURCES))
 
 # Default rule
@@ -27,11 +27,11 @@ all: $(TARGETS)
 
 # Rule for building PDFs
 $(OUTPUT_DIR)/%.pdf: $(SOURCE_DIR)/%.md $(CSS) Makefile
-	@mkdir -p $(OUTPUT_DIR)
+	@mkdir -p $(dir $@)
 	pandoc $(PFLAGS) $< -o $@
 
 # Clean rule
 clean:
-	rm -f $(OUTPUT_DIR)/*.pdf
+	rm -f $(OUTPUT_DIR)/**/*.pdf
 
 .PHONY: all clean
