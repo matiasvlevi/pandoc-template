@@ -4,7 +4,10 @@
 
 Personal framework for building & Encrypting PDF documents from markdown source.
 
-<br/>
+## Example
+
+This [markdown source](./src/page.md) generated this [PDF Document](./docs/page.pdf)
+
 
 ## Features
 
