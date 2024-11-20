@@ -1,7 +1,5 @@
 # Pandoc Template
 
-> Made for personal use, but feel free to use it for your projects.
-
 Personal framework for building & Encrypting PDF documents from markdown source.
 
 ## Example
