@@ -12,11 +12,17 @@ A simple template for building multiple markdown documents to PDFs using pandoc.
 * Meta-Preprocessor (Use document metadata in the document as macros)
 * File Encryption & Key management
 
+## Requirements
+
+* `pandoc`
+* `texlive`
+* `xelatex`
+* `openssl` (for encryption only)
+
+
 <br/>
 
 ## Get Started
-
-> Dependencies `pandoc`, `texlive`, `xelatex` 
 
 Build all markdown documents to PDFs 
 
@@ -27,8 +33,6 @@ make
 <br/>
 
 ## Encryption
-
-> Added Dependencies `openssl`
 
 Encrypt documents with `aes-256-cbc`
 
