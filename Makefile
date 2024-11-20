@@ -28,6 +28,7 @@ FILTERS=\
 SOURCES = $(shell find $(SOURCE_DIR) -name '*.md')
 TARGETS = $(patsubst $(SOURCE_DIR)/%.md,$(OUTPUT_DIR)/%.pdf,$(SOURCES))
 ENC_TARGETS = $(patsubst $(SOURCE_DIR)/%.md,$(OUTPUT_DIR)/%.pdf.enc,$(SOURCES))
+ADMIN_ENC_TARGET=$(OUTPUT_DIR)/$(ADMIN_FILE).enc
 
 # Check if we need to create new keys
 NEW_KEYS ?= 0
@@ -38,6 +39,14 @@ endif
 
 # Encrypt Targets
 all: $(TARGETS)
+
+# Create the admin file
+$(OUTPUT_DIR)/$(ADMIN_FILE):
+	@{ \
+		rm -f $@; \
+		echo "KEY, TITLE, DATE" > $@; \
+		printf "[   \x1b[93m*\x1b[0m  -> \x1b[32m.csv    \x1b[0m ] created admin file in \x1b[90m$(OUTPUT_DIR)/$(ADMIN_FILE)\x1b[0m\n"; \
+	}
 
 # Compile the markdown sources to pdf
 $(OUTPUT_DIR)/%.pdf: $(SOURCE_DIR)/%.md $(CSS) Makefile
@@ -55,7 +64,7 @@ $(OUTPUT_DIR)/%.key.sh: $(PASSWORD_DEPENDENCY)
 	}
 
 # Encrypt the pdf files
-$(OUTPUT_DIR)/%.pdf.enc: $(OUTPUT_DIR)/%.pdf $(OUTPUT_DIR)/%.key.sh $(ADMIN_FILE) $(PASSWORD_DEPENDENCY)
+$(OUTPUT_DIR)/%.pdf.enc: $(OUTPUT_DIR)/%.pdf $(OUTPUT_DIR)/%.key.sh $(OUTPUT_DIR)/$(ADMIN_FILE) $(PASSWORD_DEPENDENCY)
 	@{ \
 		src_path=$(subst $(OUTPUT_DIR),./$(SOURCE_DIR),$(<:.pdf=.md)); \
 		key_path=$(<:.pdf=.key.sh); \
@@ -70,23 +79,15 @@ $(OUTPUT_DIR)/%.pdf.enc: $(OUTPUT_DIR)/%.pdf $(OUTPUT_DIR)/%.key.sh $(ADMIN_FILE
 		echo "$$key, $$title, $$date" >> $(OUTPUT_DIR)/$(ADMIN_FILE); \
 	}
 
-# Create the admin file
-$(ADMIN_FILE):
-	@{ \
-		rm -f $(OUTPUT_DIR)/$(ADMIN_FILE); \
-		echo "KEY, TITLE, DATE" > $(OUTPUT_DIR)/$(ADMIN_FILE); \
-		printf "[   \x1b[93m*\x1b[0m  -> \x1b[32m.csv    \x1b[0m ] created admin file in \x1b[90m$(OUTPUT_DIR)/$(ADMIN_FILE)\x1b[0m\n"; \
-	}
-
 # Encrypt the csv files
-$(OUTPUT_DIR)/%.csv.enc: $(OUTPUT_DIR)/%.csv 
+$(ADMIN_ENC_TARGET): $(OUTPUT_DIR)/$(ADMIN_FILE)
 	@{ \
 		printf "[ \x1b[32m.csv\x1b[0m -> \x1b[92m.csv.enc\x1b[0m ] Encrypting Admin file \x1b[90m$<\x1b[0m into \x1b[90m$@\x1b[0m \n"; \
 		openssl enc -aes-256-cbc -salt -in $< -out $@ -pbkdf2 -iter 10000 -pass pass:$(ADMIN_PASSWORD) -base64 -A; \
 	}
 
 # Encrypt Targets
-encrypt: $(ENC_TARGETS) $(OUTPUT_DIR)/$(ADMIN_FILE).enc Makefile
+encrypt: $(ENC_TARGETS) $(ADMIN_ENC_TARGET) Makefile
 ifdef DEST
 	@{ \
 		rm -rf $(DEST)/$(OUTPUT_DIR); \
