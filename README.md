@@ -2,7 +2,7 @@
 
 > Made for personal use, but feel free to use it for your projects.
 
-A simple template for building multiple markdown documents to PDFs using pandoc. 
+Personal framework for building & Encrypting PDF documents from markdown source.
 
 <br/>
 
