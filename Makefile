@@ -1,7 +1,3 @@
-#
-
-#
-
 # --- Settings ------------------------------------------
 SOURCE_DIR = src
 OUTPUT_DIR = docs
