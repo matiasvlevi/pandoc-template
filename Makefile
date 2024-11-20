@@ -13,13 +13,12 @@ PASSWORD_P2_GEN = $$(tr -dc '0-9' < /dev/urandom | head -c$(PASSWORD_GEN_LENGTH)
 PASSWORD_GEN=$$(printf $(PASSWORD_P1_GEN)$(PASSWORD_P2_GEN))
 
 # --- Pandoc Settings -----------------------------------
-CSS = pandoc.css
 TEMPLATE = eisvogel.tex
 PDF_ENGINE = xelatex
-PFLAGS=--to=pdf\
-	  --pdf-engine=$(PDF_ENGINE)\
-	  --wrap=preserve\
-	  --listings -V fontsize=11pt
+CSS = assets/css/style.css
+PFLAGS=\
+	  --listings -V fontsize=11pt\
+	  --wrap=preserve
 FILTERS=\
 	  --lua-filter=filters/metamacros.lua\
 	  --lua-filter=filters/baseroot.lua
@@ -45,7 +44,7 @@ $(OUTPUT_DIR)/%.pdf: $(SOURCE_DIR)/%.md $(CSS) Makefile
 	@{\
 		mkdir -p $(dir $@); \
 		printf "[ \x1b[96m.md\x1b[0m  -> \x1b[33m.pdf\x1b[0m     ] Compiling \x1b[90m$<\x1b[0m into \x1b[90m$@\x1b[0m\n"; \
-		pandoc $(PFLAGS) $(FILTERS) --css $(CSS) --template $(TEMPLATE) $< -o $@; \
+		pandoc $(PFLAGS) --to=pdf --pdf-engine=$(PDF_ENGINE) $(FILTERS) --css $(CSS) --template $(TEMPLATE) $< -o $@; \
 	}
 
 # Create the Key file
