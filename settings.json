@@ -1,0 +1,8 @@
+{
+    "workbench.colorTheme": "One Dark Pro Darker",
+    "workbench.editor.enablePreview": false,
+    "[markdown]": {
+        "editor.wordWrap": "bounded",
+        "editor.wordWrapColumn": 80
+    }
+}

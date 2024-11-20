@@ -1,0 +1,31 @@
+services:
+  pandoc-ide:
+    container_name: pandoc-ide
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PUID=911
+      - PGID=1001
+      - TZ=Etc/UTC
+      - PASSWORD=pandoc
+      - SUDO_PASSWORD=abc
+      - DEFAULT_WORKSPACE=/workspace
+      - UMASK=022
+    volumes:
+      - ./system:/custom-cont-init.d:ro
+      - ./src:/workspace/src
+      - ./docs:/workspace/docs
+      - ./assets:/workspace/assets
+      - ./filters:/workspace/filters
+      - ./.gitattributes:/workspace/.gitattributes
+      - ./.gitignore:/workspace/.gitignore
+      - ./README.md:/workspace/README.md
+      - ./pandoc.css:/workspace/pandoc.css
+      - ./eisvogel.tex:/workspace/eisvogel.tex
+      - ./Makefile:/workspace/Makefile
+      - ./settings.json:/config/data/Machine/settings.json
+      - ./config:/config
+    ports:
+      - 8443:8443
+    restart: unless-stopped

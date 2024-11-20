@@ -52,21 +52,16 @@ Lorem ipsum dolor sit amet, {{author[1]}} consectetur adipiscing {{date}} elit. 
 
 ### Asset root
 
-Define the document's root directory for assets. This allows your local environement to know about these paths and provide intellisense for it. 
-
-```mdx
+```md
 ---
 title: My Document
-root: ./assets/
 ---
 
-<!-- use the relative path for assets -->
-
-![Sample Caption](../assets/frog.png) 
+![Sample Caption](/assets/frog.png) 
 
 ```
 
-This will resolve as `./assets/frog.png`.
+This will resolve as `$PWD/assets/frog.png`.
 
 <br/>
 
