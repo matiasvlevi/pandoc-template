@@ -1,4 +1,4 @@
-# Pandoc Template
+# Pandoc + Pages Template
 
 Personal framework for building & Encrypting PDF documents from markdown source.
 
